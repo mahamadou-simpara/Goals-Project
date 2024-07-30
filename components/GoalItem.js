@@ -13,7 +13,11 @@ function GoalItem({ courseGoals, onDeleteGoal }) {
         data={courseGoals}
         renderItem={(itemData) => {
           return (
-            <Pressable onPress={onSelectItem.bind(this, itemData.item.id)}>
+            <Pressable 
+            onPress={onSelectItem.bind(this, itemData.item.id)}
+            style={({pressed}) => pressed && styles.itemPressed }
+            android_ripple={{color: '#210644'}}
+            >
               <View style={styles.goalItem}>
                 <Text style={styles.goalText}>{itemData.item.text}</Text>
               </View>
@@ -44,6 +48,10 @@ const styles = StyleSheet.create({
   },
   goalText: {
     color: 'white'
+  },
+  itemPressed: {
+    opacity: 0.5,
+    // opacity: '#201E43',
   }
 });
 

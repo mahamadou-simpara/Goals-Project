@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import {
   Button,
-  FlatList,
-  ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   View
 } from 'react-native';
 import GoalItem from './components/GoalItem';
@@ -13,7 +9,8 @@ import GoalInput from './components/GoalInput';
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
-
+  const [isModalShown, setIsModalShown] = useState(false);
+ 
   function goalSubmitHandler(enteredInputvalue) {
     setCourseGoals((currentGoals) => [...currentGoals, {text: enteredInputvalue, id: Math.random().toString()}])
   }
@@ -24,10 +21,17 @@ export default function App() {
     })
   }
 
+  function closeModalHandler() {
+    setIsModalShown(false)
+  }
+
 
   return (
     <View style={styles.container}>
-      <GoalInput onAddGoal={goalSubmitHandler} />
+      <View style={styles.buttonContainer}>
+      <Button title='Add new Goal' onPress={ () => setIsModalShown(true)} />
+      </View>
+      <GoalInput onAddGoal={goalSubmitHandler} visible={isModalShown} onCloseModal={closeModalHandler} />
       <GoalItem courseGoals={courseGoals} onDeleteGoal={deleteGoalHandler} />
     </View>
   );
@@ -47,5 +51,14 @@ const styles = StyleSheet.create({
     padding: 8,
     marginRight: 8,
     borderRadius: 10
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEEEEE',
+    marginBottom: 10,
+    justifyContent: 'center'
   }
 });
