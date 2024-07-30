@@ -9,31 +9,26 @@ import {
   View
 } from 'react-native';
 import GoalItem from './components/GoalItem';
+import GoalInput from './components/GoalInput';
 
 export default function App() {
-  const [enteredInputvalue, setEnteredInputvalue] = useState('');
   const [courseGoals, setCourseGoals] = useState([]);
 
-  function goalTextInputHandler(enteredValue) {
-    setEnteredInputvalue(enteredValue);
+  function goalSubmitHandler(enteredInputvalue) {
+    setCourseGoals((currentGoals) => [...currentGoals, {text: enteredInputvalue, id: Math.random().toString()}])
   }
 
-  function goalSubmitHandler() {
-    setCourseGoals((currentGoals) => [...currentGoals, {text: enteredInputvalue, id: Math.random().toString()}]);
-    setEnteredInputvalue('');
+  function deleteGoalHandler(id) {
+    setCourseGoals(presentGoals => { 
+      return presentGoals.filter((goal) => goal.id !== id)
+    })
   }
+
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Write down your goal "
-          onChangeText={goalTextInputHandler}
-        />
-        <Button title="Add Goal" onPress={goalSubmitHandler} />
-      </View>
-      <GoalItem courseGoals={courseGoals} />
+      <GoalInput onAddGoal={goalSubmitHandler} />
+      <GoalItem courseGoals={courseGoals} onDeleteGoal={deleteGoalHandler} />
     </View>
   );
 }
@@ -43,14 +38,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 15
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEEEE',
-    marginBottom: 10
-  },
+  
   textInput: {
     alignItems: 'center',
     borderWidth: 1,
